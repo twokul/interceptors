@@ -9,6 +9,32 @@
   "engines": {
     "node": ">=14"
   },
+  "exports": {
+    ".": {
+      "require": "./lib/index.js",
+      "import": "./lib/esm/index.js"
+    },
+    "./lib/interceptors/ClientRequest": {
+      "require": "./lib/interceptors/ClientRequest/index.js",
+      "import": "./lib/esm/interceptors/ClientRequest/index.js"
+    },
+    "./lib/interceptors/XMLHttpRequest": {
+      "require": "./lib/interceptors/XMLHttpRequest/index.js",
+      "import": "./lib/esm/interceptors/XMLHttpRequest/index.js"
+    },
+    "./lib/utils/getCleanUrl": {
+      "require": "./lib/utils/getCleanUrl.js",
+      "import": "./lib/esm/utils/getCleanUrl.js"
+    },
+    "./lib/utils/bufferUtils": {
+      "require": "./lib/utils/bufferUtils.js",
+      "import": "./lib/esm/utils/bufferUtils.js"
+    },
+    "./lib": {
+      "require": "./lib/index.js",
+      "import": "./lib/esm/index.js"
+    }
+  },
   "scripts": {
     "start": "tsc --build -w",
     "test": "yarn test:internal && yarn test:integration",
@@ -17,7 +43,7 @@
     "test:integration:node": "jest --c test/jest.node.config.js --runInBand",
     "test:integration:browser": "jest --c test/jest.browser.config.js",
     "clean": "rimraf lib",
-    "build": "yarn clean && tsc --build",
+    "build": "yarn clean && tsc --build && tsc -p tsconfig.esm.json && echo >lib/esm/package.json '{\"type\":\"module\"}'",
     "prepare": "yarn simple-git-hooks init",
     "release": "release publish",
     "prepublishOnly": "yarn build && yarn test"
